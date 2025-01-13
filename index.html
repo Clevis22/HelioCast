@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HelioCast</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --primary: #FF6B6B;
+      --secondary: #4ECDC4;
+      --gradient-start: #2C3E50;
+      --gradient-end: #3498DB;
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --text-primary: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .header {
+      text-align: center;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .title {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .search-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .button-group {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .btn {
+      padding: 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .status {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 1.1rem;
+    }
+
+    .forecast-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    @media (min-width: 640px) {
+      .forecast-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .forecast-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .forecast-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .forecast-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .forecast-date {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .score-ring {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: conic-gradient(var(--primary) 0%, transparent 0%);
+      position: relative;
+    }
+
+    .score-ring::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 50%;
+      background: var(--card-bg);
+    }
+
+    .score-value {
+      position: relative;
+      z-index: 1;
+    }
+
+    .quality-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .forecast-details {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      text-align: left;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header class="header">
+      <svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+      <h1 class="title">HelioCast</h1>
+      <p class="subtitle">Discover how pretty the next sunset will be</p>
+    </header>
+
+    <div class="search-container">
+      <div class="input-group">
+        <label for="cityInput">Enter Location</label>
+        <input id="cityInput" class="input-field" type="text" placeholder="e.g. San Francisco, CA" />
+      </div>
+
+      <div class="button-group">
+        <button onclick="useGeolocation()" class="btn btn-secondary">
+          Use My Location
+        </button>
+        <button onclick="fetchSunsetData()" class="btn btn-primary">
+          Get Forecast
+        </button>
+      </div>
+    </div>
+
+    <div class="status" id="statusMsg"></div>
+    <div class="forecast-grid" id="forecastDiv"></div>
+  </div>
+  <script>
+    async function useGeolocation() {
+  navigator.geolocation.getCurrentPosition(
+    async pos => {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+
+      document.getElementById('statusMsg').innerHTML = '<div class="loading"></div> Loading...';
+      document.getElementById('forecastDiv').innerHTML = '';
+
+      try {
+        // Get city name from coordinates
+        const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+        const geoRes = await fetch(geoUrl);
+        const geoData = await geoRes.json();
+        const city = geoData.address.city || geoData.address.town || geoData.address.village || 'your location';
+
+        // Fetch sunset data with coordinates
+        await fetchSunsetData(lat, lon, city);
+      } catch (err) {
+        document.getElementById('statusMsg').textContent = `Error: ${err.message}`;
+        console.error('Error:', err);
+      }
+    },
+    err => alert('Geolocation error: ' + err.message)
+  );
+}
+
+    function formatDate(date) {
+      return new Intl.DateTimeFormat('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric'
+      }).format(date);
+    }
+
+    function getQualityText(score) {
+      if (score >= 90) return 'Exceptional 🌅';
+      if (score >= 80) return 'Very Good ✨';
+      if (score >= 70) return 'Good 👍';
+      if (score >= 50) return 'Fair';
+      return 'Poor';
+    }
+
+    async function calculateSunsetScore(metrics) {
+      let score = 0;
+      
+      // Cloud Coverage Analysis (0-30 points)
+      let cloudScore = 30;
+      if (metrics.cloudCoverHigh < 30) cloudScore -= 10;
+      if (metrics.cloudCoverHigh > 70) cloudScore -= 10;
+      if (metrics.cloudCoverLow > 40) cloudScore -= 15;
+      if (metrics.cloudCoverMid > 60) cloudScore -= 10;
+      
+      // Atmospheric Moisture Conditions (0-25 points)
+      let moistureScore = 25;
+      if (metrics.vpd < 0.5 || metrics.vpd > 1.5) {
+        moistureScore -= Math.min(10, Math.abs(metrics.vpd - 1) * 10);
+      }
+      if (metrics.et0 > 0.3) {
+        moistureScore -= Math.min(5, (metrics.et0 - 0.3) * 10);
+      }
+      if (metrics.humidity < 30 || metrics.humidity > 70) {
+        moistureScore -= Math.min(10, Math.abs(metrics.humidity - 50) * 0.2);
+      }
+      
+      // Visibility & Weather Stability (0-25 points)
+      let stabilityScore = 25;
+      if (metrics.visibility < 10000) {
+        stabilityScore -= (10000 - metrics.visibility) / 400;
+      }
+      if (metrics.precipProb > 20) {
+        stabilityScore -= metrics.precipProb * 0.2;
+      }
+      if (metrics.windSpeed > 20) {
+        stabilityScore -= (metrics.windSpeed - 20) * 0.5;
+      }
+      if (metrics.cape > 1000) {
+        stabilityScore -= 5;
+      }
+      
+      // Light Conditions (0-20 points)
+      let lightScore = 20;
+      if (metrics.radiation > 100) {
+        lightScore -= Math.min(15, metrics.radiation / 100);
+      }
+
+      // Air Quality Conditions (0-20 points)
+      let airQualityScore = 20;
+      if (metrics.pm10 > 50 || metrics.pm2_5 > 25) {
+        airQualityScore -= Math.min(10, ((metrics.pm10 / 50) + (metrics.pm2_5 / 25)) * 5);
+      }
+      if (metrics.co > 5) {
+        airQualityScore -= Math.min(5, (metrics.co - 5) * 2);
+      }
+      if (metrics.no2 > 40) {
+        airQualityScore -= Math.min(5, (metrics.no2 - 40) * 0.5);
+      }
+      if (metrics.so2 > 20) {
+        airQualityScore -= Math.min(5, (metrics.so2 - 20) * 0.5);
+      }
+      if (metrics.o3 > 100) {
+        airQualityScore -= Math.min(5, (metrics.o3 - 100) * 0.1);
+      }
+      
+      score = cloudScore + moistureScore + stabilityScore + lightScore + airQualityScore;
+      return Math.max(0, Math.min(100, Math.round(score)));
+    }
+
+    async function fetchSunsetData(lat, lon, city) {
+  document.getElementById('statusMsg').innerHTML = '<div class="loading"></div> Loading...';
+  document.getElementById('forecastDiv').innerHTML = '';
+
+  try {
+    if (!lat || !lon) {
+      const cityInput = document.getElementById('cityInput').value.trim();
+      if (!cityInput) {
+        throw new Error('Please enter a city');
+      }
+
+      // Get coordinates from city name
+      const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityInput)}&format=json&limit=1`;
+      const geoRes = await fetch(geoUrl);
+      const [geoData] = await geoRes.json();
+      if (!geoData) throw new Error('City not found');
+      lat = geoData.lat;
+      lon = geoData.lon;
+      city = cityInput;
+    }
+
+    // Get sunset times for next 5 days
+    const forecasts = [];
+    for (let i = 0; i < 5; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+
+      // Get sunset time
+      const sunsetUrl = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0&date=${date.toISOString().split('T')[0]}`;
+      const sunsetRes = await fetch(sunsetUrl);
+      const sunsetData = await sunsetRes.json();
+
+      if (sunsetData.status !== 'OK') continue;
+
+      const sunsetTime = new Date(sunsetData.results.sunset);
+
+      // Get weather data
+      const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,cloudcover,cloudcover_low,cloudcover_mid,cloudcover_high,visibility,precipitation_probability,pressure_msl,windspeed_10m,winddirection_10m,apparent_temperature,direct_radiation,cape,vapor_pressure_deficit,et0_fao_evapotranspiration&timezone=auto`;
+      const weatherRes = await fetch(weatherUrl);
+      const weatherData = await weatherRes.json();
+
+      // Get air quality data
+      const airQualityUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&hourly=pm10,pm2_5,carbon_monoxide,carbon_dioxide,nitrogen_dioxide,sulphur_dioxide,ozone,dust`;
+      const airQualityRes = await fetch(airQualityUrl);
+      const airQualityData = await airQualityRes.json();
+
+      const sunsetHourIndex = weatherData.hourly.time.findIndex(time => 
+        new Date(time).getHours() === sunsetTime.getHours() &&
+        new Date(time).getDate() === date.getDate()
+      );
+
+      if (sunsetHourIndex === -1) continue;
+
+      const metrics = {
+        cloudCoverLow: weatherData.hourly.cloudcover_low?.[sunsetHourIndex] ?? 0,
+        cloudCoverMid: weatherData.hourly.cloudcover_mid?.[sunsetHourIndex] ?? 0,
+        cloudCoverHigh: weatherData.hourly.cloudcover_high?.[sunsetHourIndex] ?? 0,
+        humidity: weatherData.hourly.relativehumidity_2m?.[sunsetHourIndex] ?? 50,
+        visibility: weatherData.hourly.visibility?.[sunsetHourIndex] ?? 20000,
+        precipProb: weatherData.hourly.precipitation_probability?.[sunsetHourIndex] ?? 0,
+        windSpeed: weatherData.hourly.windspeed_10m?.[sunsetHourIndex] ?? 0,
+        radiation: weatherData.hourly.direct_radiation?.[sunsetHourIndex] ?? 0,
+        vpd: weatherData.hourly.vapor_pressure_deficit?.[sunsetHourIndex] ?? 0.5,
+        et0: weatherData.hourly.et0_fao_evapotranspiration?.[sunsetHourIndex] ?? 0.1,
+        pm10: airQualityData.hourly.pm10?.[sunsetHourIndex] ?? 0,
+        pm2_5: airQualityData.hourly.pm2_5?.[sunsetHourIndex] ?? 0,
+        co: airQualityData.hourly.carbon_monoxide?.[sunsetHourIndex] ?? 0,
+        co2: airQualityData.hourly.carbon_dioxide?.[sunsetHourIndex] ?? 0,
+        no2: airQualityData.hourly.nitrogen_dioxide?.[sunsetHourIndex] ?? 0,
+        so2: airQualityData.hourly.sulphur_dioxide?.[sunsetHourIndex] ?? 0,
+        o3: airQualityData.hourly.ozone?.[sunsetHourIndex] ?? 0,
+        dust: airQualityData.hourly.dust?.[sunsetHourIndex] ?? 0
+      };
+
+      const score = await calculateSunsetScore(metrics);
+
+      forecasts.push({
+        date: date,
+        sunsetTime: sunsetTime,
+        score: score,
+        metrics: metrics
+      });
+    }
+
+    // Display forecasts
+    const forecastHtml = forecasts.map(forecast => `
+      <div class="forecast-day">
+        <div class="forecast-date">${formatDate(forecast.date)}</div>
+        <div class="score-indicator">${forecast.score}%</div>
+        <div class="forecast-time">
+          Sunset: ${forecast.sunsetTime.toLocaleTimeString([], { 
+            hour: '2-digit', 
+            minute: '2-digit'
+          })}
+        </div>
+        <div class="quality-badge">${getQualityText(forecast.score)}</div>
+        <div class="forecast-details">
+          Clouds: ${Math.round((forecast.metrics.cloudCoverLow + forecast.metrics.cloudCoverMid + forecast.metrics.cloudCoverHigh) / 3)}%<br>
+          Visibility: ${Math.round(forecast.metrics.visibility/1000)}km<br>
+          PM10: ${forecast.metrics.pm10} µg/m³<br>
+          PM2.5: ${forecast.metrics.pm2_5} µg/m³<br>
+          CO: ${forecast.metrics.co} ppm<br>
+          NO2: ${forecast.metrics.no2} ppb<br>
+          SO2: ${forecast.metrics.so2} ppb<br>
+          O3: ${forecast.metrics.o3} ppb<br>
+          Dust: ${forecast.metrics.dust} µg/m³
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('forecastDiv').innerHTML = forecastHtml;
+    document.getElementById('statusMsg').textContent = `5-day sunset forecast for ${city}`;
+
+  } catch (err) {
+    document.getElementById('statusMsg').textContent = `Error: ${err.message}`;
+    console.error('Error:', err);
+  }
+}
+  </script>
+
+
+</body>
+</html>
