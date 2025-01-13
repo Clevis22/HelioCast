@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>HelioCast</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
     :root {
       --primary: #FF6B6B;
       --secondary: #4ECDC4;
-      --gradient-start: #2C3E50;
-      --gradient-end: #3498DB;
-      --card-bg: rgba(255, 255, 255, 0.1);
+      --gradient-start: #1A1F35;
+      --gradient-end: #2C3E50;
+      --card-bg: rgba(255, 255, 255, 0.08);
       --text-primary: #FFFFFF;
       --text-secondary: rgba(255, 255, 255, 0.7);
     }
@@ -25,83 +25,122 @@
     }
 
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
       min-height: 100vh;
       background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
       color: var(--text-primary);
       line-height: 1.5;
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(78, 205, 196, 0.1) 0%, transparent 50%);
+      pointer-events: none;
     }
 
     .app-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 1rem;
+      padding: 2rem;
+      position: relative;
     }
 
     .header {
       text-align: center;
-      padding: 2rem 0;
-      margin-bottom: 2rem;
+      padding: 3rem 0;
+      margin-bottom: 3rem;
+      position: relative;
     }
 
     .logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1rem;
-      animation: float 3s ease-in-out infinite;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.5rem;
+      animation: float 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.3));
     }
 
     .title {
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-size: clamp(2.5rem, 8vw, 4rem);
       font-weight: 700;
       background: linear-gradient(to right, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     }
 
     .subtitle {
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: var(--text-secondary);
       max-width: 600px;
       margin: 0 auto;
+      font-weight: 300;
+      letter-spacing: 0.02em;
     }
 
     .search-container {
       background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 2rem;
+      margin-bottom: 3rem;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transform: translateY(0);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .search-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
     }
 
     .input-group {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .input-group label {
       display: block;
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
       color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.02em;
     }
 
     .input-field {
       width: 100%;
-      padding: 1rem;
+      padding: 1.25rem;
       border: 2px solid rgba(255, 255, 255, 0.1);
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 15px;
       color: var(--text-primary);
-      font-size: 1rem;
+      font-size: 1.1rem;
+      font-family: inherit;
       transition: all 0.3s ease;
     }
 
     .input-field:focus {
       outline: none;
       border-color: var(--primary);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.1);
     }
 
     .button-group {
@@ -117,40 +156,66 @@
     }
 
     .btn {
-      padding: 1rem;
+      padding: 1.25rem;
       border: none;
-      border-radius: 12px;
-      font-size: 1rem;
+      border-radius: 15px;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.1));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn:hover::after {
+      opacity: 1;
     }
 
     .btn-primary {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary), #FF8E8E);
       color: white;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
     }
 
     .btn-secondary {
       background: rgba(255, 255, 255, 0.1);
       color: white;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
     }
 
     .status {
       text-align: center;
       margin: 2rem 0;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
     }
 
     .forecast-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 1.5rem;
       margin-top: 2rem;
     }
 
@@ -166,81 +231,97 @@
       }
     }
 
-    .forecast-card {
+    .forecast-day {
       background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 1.5rem;
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 2rem;
       text-align: center;
-      transition: transform 0.3s ease;
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
     }
 
-    .forecast-card:hover {
-      transform: translateY(-5px);
+    .forecast-day::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(78, 205, 196, 0.1));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .forecast-day:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .forecast-day:hover::before {
+      opacity: 1;
     }
 
     .forecast-date {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-
-    .score-ring {
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 1rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
-      background: conic-gradient(var(--primary) 0%, transparent 0%);
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
       position: relative;
     }
 
-    .score-ring::before {
-      content: '';
-      position: absolute;
-      inset: 5px;
-      border-radius: 50%;
-      background: var(--card-bg);
+    .score-indicator {
+      font-size: 3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 1rem 0;
+      position: relative;
     }
 
-    .score-value {
+    .forecast-time {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
       position: relative;
-      z-index: 1;
     }
 
     .quality-badge {
       display: inline-block;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
       margin: 1rem 0;
       background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
     }
 
     .forecast-details {
       font-size: 0.9rem;
       color: var(--text-secondary);
       text-align: left;
-    }
-
-    .detail-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      line-height: 1.8;
+      position: relative;
     }
 
     .loading {
       display: inline-block;
-      width: 24px;
-      height: 24px;
+      width: 30px;
+      height: 30px;
       border: 3px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       border-top-color: var(--primary);
       animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
     }
 
     @keyframes spin {
@@ -248,9 +329,67 @@
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-15px) rotate(5deg); }
     }
+
+    /* Additional decorative elements */
+    .floating-orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(60px);
+      z-index: -1;
+    }
+
+    .orb-1 {
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 107, 107, 0.15);
+      top: -150px;
+      right: -150px;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: rgba(78, 205, 196, 0.15);
+      bottom: -200px;
+      left: -200px;
+      animation: float 10s ease-in-out infinite reverse;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+      .app-container {
+        padding: 1rem;
+      }
+
+      .header {
+        padding: 2rem 0;
+      }
+
+      .search-container {
+        padding: 1.5rem;
+        border-radius: 20px;
+      }
+
+      .forecast-day {
+        padding: 1.5rem;
+      }
+    }
+    .time-block {
+  padding: 10px;
+  margin: 5px 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+}
+
+.score-indicator {
+  display: inline-block;
+  margin-left: 10px;
+  font-weight: bold;
+}
   </style>
 </head>
 <body>
@@ -289,6 +428,7 @@
 
     <div class="status" id="statusMsg"></div>
     <div class="forecast-grid" id="forecastDiv"></div>
+    
   </div>
   <script>
     async function useGeolocation() {
@@ -333,6 +473,26 @@
       if (score >= 50) return 'Fair';
       return 'Poor';
     }
+
+    // First add this new function alongside existing calculateSunsetScore
+async function calculateSunriseScore(metrics) {
+  // Similar to sunset score but weighted differently for morning conditions
+  let score = 100;
+  
+  // Morning clarity is important
+  score -= (metrics.cloudCoverLow + metrics.cloudCoverMid + metrics.cloudCoverHigh) / 3;
+  
+  // Visibility affects sunrise views
+  if (metrics.visibility < 10000) score -= 20;
+  else if (metrics.visibility < 20000) score -= 10;
+  
+  // Air quality affects morning light
+  if (metrics.pm10 > 50) score -= 10;
+  if (metrics.pm2_5 > 25) score -= 10;
+  if (metrics.dust > 50) score -= 10;
+  
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
 
     async function calculateSunsetScore(metrics) {
       let score = 0;
@@ -410,7 +570,6 @@
         throw new Error('Please enter a city');
       }
 
-      // Get coordinates from city name
       const geoUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityInput)}&format=json&limit=1`;
       const geoRes = await fetch(geoUrl);
       const [geoData] = await geoRes.json();
@@ -420,13 +579,12 @@
       city = cityInput;
     }
 
-    // Get sunset times for next 5 days
     const forecasts = [];
     for (let i = 0; i < 5; i++) {
       const date = new Date();
       date.setDate(date.getDate() + i);
 
-      // Get sunset time
+      // Get sunset and sunrise times
       const sunsetUrl = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lon}&formatted=0&date=${date.toISOString().split('T')[0]}`;
       const sunsetRes = await fetch(sunsetUrl);
       const sunsetData = await sunsetRes.json();
@@ -434,6 +592,7 @@
       if (sunsetData.status !== 'OK') continue;
 
       const sunsetTime = new Date(sunsetData.results.sunset);
+      const sunriseTime = new Date(sunsetData.results.sunrise);
 
       // Get weather data
       const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relativehumidity_2m,cloudcover,cloudcover_low,cloudcover_mid,cloudcover_high,visibility,precipitation_probability,pressure_msl,windspeed_10m,winddirection_10m,apparent_temperature,direct_radiation,cape,vapor_pressure_deficit,et0_fao_evapotranspiration&timezone=auto`;
@@ -476,41 +635,52 @@
       const score = await calculateSunsetScore(metrics);
 
       forecasts.push({
-        date: date,
-        sunsetTime: sunsetTime,
-        score: score,
-        metrics: metrics
-      });
+  date: date,
+  sunriseTime: sunriseTime,
+  sunsetTime: sunsetTime,
+  sunriseScore: await calculateSunriseScore(metrics),
+  sunsetScore: await calculateSunsetScore(metrics),
+  metrics: metrics
+});
     }
 
-    // Display forecasts
     const forecastHtml = forecasts.map(forecast => `
-      <div class="forecast-day">
-        <div class="forecast-date">${formatDate(forecast.date)}</div>
-        <div class="score-indicator">${forecast.score}%</div>
-        <div class="forecast-time">
-          Sunset: ${forecast.sunsetTime.toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit'
-          })}
-        </div>
-        <div class="quality-badge">${getQualityText(forecast.score)}</div>
-        <div class="forecast-details">
-          Clouds: ${Math.round((forecast.metrics.cloudCoverLow + forecast.metrics.cloudCoverMid + forecast.metrics.cloudCoverHigh) / 3)}%<br>
-          Visibility: ${Math.round(forecast.metrics.visibility/1000)}km<br>
-          PM10: ${forecast.metrics.pm10} µg/m³<br>
-          PM2.5: ${forecast.metrics.pm2_5} µg/m³<br>
-          CO: ${forecast.metrics.co} ppm<br>
-          NO2: ${forecast.metrics.no2} ppb<br>
-          SO2: ${forecast.metrics.so2} ppb<br>
-          O3: ${forecast.metrics.o3} ppb<br>
-          Dust: ${forecast.metrics.dust} µg/m³
-        </div>
+  <div class="forecast-day">
+    <div class="forecast-date">${formatDate(forecast.date)}</div>
+    <div class="forecast-time">
+      <div class="time-block">
+        🌅 Sunrise: ${forecast.sunriseTime.toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit'
+        })}
+        <div class="score-indicator">Score: ${forecast.sunriseScore}%</div>
+        <div class="quality-badge">${getQualityText(forecast.sunriseScore)}</div>
       </div>
-    `).join('');
+      <div class="time-block">
+        🌇 Sunset: ${forecast.sunsetTime.toLocaleTimeString([], { 
+          hour: '2-digit', 
+          minute: '2-digit'
+        })}
+        <div class="score-indicator">Score: ${forecast.sunsetScore}%</div>
+        <div class="quality-badge">${getQualityText(forecast.sunsetScore)}</div>
+      </div>
+    </div>
+    <div class="forecast-details">
+      Clouds: ${Math.round((forecast.metrics.cloudCoverLow + forecast.metrics.cloudCoverMid + forecast.metrics.cloudCoverHigh) / 3)}%<br>
+      Visibility: ${Math.round(forecast.metrics.visibility/1000)}km<br>
+      PM10: ${forecast.metrics.pm10} µg/m³<br>
+      PM2.5: ${forecast.metrics.pm2_5} µg/m³<br>
+      CO: ${forecast.metrics.co} ppm<br>
+      NO2: ${forecast.metrics.no2} ppb<br>
+      SO2: ${forecast.metrics.so2} ppb<br>
+      O3: ${forecast.metrics.o3} ppb<br>
+      Dust: ${forecast.metrics.dust} µg/m³
+    </div>
+  </div>
+`).join('');
 
     document.getElementById('forecastDiv').innerHTML = forecastHtml;
-    document.getElementById('statusMsg').textContent = `5-day sunset forecast for ${city}`;
+    document.getElementById('statusMsg').textContent = `5-day sunrise and sunset forecast for ${city}`;
 
   } catch (err) {
     document.getElementById('statusMsg').textContent = `Error: ${err.message}`;
