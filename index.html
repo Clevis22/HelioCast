@@ -281,6 +281,28 @@ body {
   font-size: 0.875rem;
 }
 
+.about-section {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+  border: 1px solid hsla(0, 0%, 100%, 0.05);
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.data-sources {
+  margin: 20px 0;
+}
+
+.footer {
+  text-align: center;
+  color: #666;
+  margin-top: 20px;
+}
+
 /* Score Colors with HSL */
 [data-score="exceptional"] { color: hsl(142, 71%, 45%); }
 [data-score="very-good"] { color: hsl(190, 95%, 39%); }
@@ -393,7 +415,7 @@ body {
         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
       </svg>
       <h1 class="title">HelioCast</h1>
-      <p class="subtitle">Discover how pretty the next sunset will be</p>
+      <p class="subtitle">Local Sunset & Sunrise Forecast</p>
     </header>
 
     <div class="search-container">
@@ -415,6 +437,19 @@ body {
     <div class="status" id="statusMsg"></div>
     <div class="forecast-grid" id="forecastDiv"></div>
     
+    <div class="about-section">
+      <h2>About HelioCast</h2>
+      <p>Heliocast helps photographers and outdoor enthusiasts predict sunset quality. Our algorithm considers factors like cloud cover, visibility, and other atmospheric conditions to help you find the perfect sunset.</p>
+      <div class="data-sources">
+        <h3>Data Sources</h3>
+        <ul>
+          <li>Weather data: OpenWeatherMap API</li>
+          <li>Sunrise/Sunset calculations: SunriseSunset API</li>
+        </ul>
+      </div>
+      <p class="footer">HelioCast is still under development and may make mistakes</p>
+    </div>
+
   </div>
   <script>
     async function useGeolocation() {
