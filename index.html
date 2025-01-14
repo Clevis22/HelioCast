@@ -651,17 +651,6 @@ async function calculateSunriseScore(metrics) {
         <div class="quality-badge">${getQualityText(forecast.sunsetScore)}</div>
       </div>
     </div>
-    <div class="forecast-details">
-      Clouds: ${Math.round((forecast.metrics.cloudCoverLow + forecast.metrics.cloudCoverMid + forecast.metrics.cloudCoverHigh) / 3)}%<br>
-      Visibility: ${Math.round(forecast.metrics.visibility/1000)}km<br>
-      PM10: ${forecast.metrics.pm10} µg/m³<br>
-      PM2.5: ${forecast.metrics.pm2_5} µg/m³<br>
-      CO: ${forecast.metrics.co} ppm<br>
-      NO2: ${forecast.metrics.no2} ppb<br>
-      SO2: ${forecast.metrics.so2} ppb<br>
-      O3: ${forecast.metrics.o3} ppb<br>
-      Dust: ${forecast.metrics.dust} µg/m³
-    </div>
   </div>
 `).join('');
 
